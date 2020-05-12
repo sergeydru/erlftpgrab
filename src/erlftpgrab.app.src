@@ -1,5 +1,5 @@
 {application, erlftpgrab,
- [{description, "An OTP application"},
+ [{description, "An FTP grabber application"},
   {vsn, "0.1.0"},
   {registered, []},
   {mod, {erlftpgrab_app, []}},
