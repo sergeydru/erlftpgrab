@@ -14,7 +14,8 @@
 -define(SERVER, ?MODULE).
 
 start_link() ->
-    supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+  io:format(".....start_link.....~n", []),
+  supervisor:start_link({local, ?SERVER}, ?MODULE, []).
 
 %% sup_flags() = #{strategy => strategy(),         % optional
 %%                 intensity => non_neg_integer(), % optional
@@ -26,10 +27,22 @@ start_link() ->
 %%                  type => worker(),       % optional
 %%                  modules => modules()}   % optional
 init([]) ->
-    SupFlags = #{strategy => one_for_all,
-                 intensity => 0,
-                 period => 1},
-    ChildSpecs = [],
-    {ok, {SupFlags, ChildSpecs}}.
-
+  io:format(".....init.....~n", []),
+  SupFlags = #{strategy => one_for_one,
+    intensity => 1000,
+    period => 3600},
+  ChildSpecs = [
+    #{id => erlftpgrab_worker,
+      start => {erlftpgrab_worker, start_link, []},
+      restart => permanent,
+      shutdown => 2000,
+      type => worker,
+      modules => [erlftpgrab_worker]}
+  ],
+  {ok, {SupFlags, ChildSpecs}}.
 %% internal functions
+
+
+
+
+
